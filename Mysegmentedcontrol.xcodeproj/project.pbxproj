@@ -13,6 +13,7 @@
 		3B9EB1551F049858005560D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B9EB1531F049858005560D9 /* Main.storyboard */; };
 		3B9EB1571F049858005560D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B9EB1561F049858005560D9 /* Assets.xcassets */; };
 		3B9EB15A1F049858005560D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B9EB1581F049858005560D9 /* LaunchScreen.storyboard */; };
+		3B9EB1631F04989E005560D9 /* VMCustomSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9EB1621F04989E005560D9 /* VMCustomSegmentedControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		3B9EB1561F049858005560D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B9EB1591F049858005560D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B9EB15B1F049858005560D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B9EB1611F04989E005560D9 /* VMCustomSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMCustomSegmentedControl.h; sourceTree = "<group>"; };
+		3B9EB1621F04989E005560D9 /* VMCustomSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMCustomSegmentedControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,8 @@
 				3B9EB14E1F049858005560D9 /* AppDelegate.m */,
 				3B9EB1501F049858005560D9 /* ViewController.h */,
 				3B9EB1511F049858005560D9 /* ViewController.m */,
+				3B9EB1611F04989E005560D9 /* VMCustomSegmentedControl.h */,
+				3B9EB1621F04989E005560D9 /* VMCustomSegmentedControl.m */,
 				3B9EB1531F049858005560D9 /* Main.storyboard */,
 				3B9EB1561F049858005560D9 /* Assets.xcassets */,
 				3B9EB1581F049858005560D9 /* LaunchScreen.storyboard */,
@@ -150,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B9EB1631F04989E005560D9 /* VMCustomSegmentedControl.m in Sources */,
 				3B9EB1521F049858005560D9 /* ViewController.m in Sources */,
 				3B9EB14F1F049858005560D9 /* AppDelegate.m in Sources */,
 				3B9EB14C1F049858005560D9 /* main.m in Sources */,
