@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor redColor];
+    self.view.backgroundColor = [UIColor orangeColor];
     UIButton *add = [UIButton buttonWithType:UIButtonTypeCustom];
     [add setTitle:@"增加一个" forState:UIControlStateNormal];
     [add setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -32,7 +32,13 @@
     [self.view addSubview:remove];
     
     // Do any additional setup after loading the view, typically from a nib.
-    VMCustomSegmentedControl *control = [VMCustomSegmentedControl segmentedControlForItems:@[@"附近",@"发现",@"我的",@"他的"] widthForEachItem:50];
+    NSArray *items = @[@"附近",@"发现",@"我的",@"他的"];
+    
+//    VMCustomSegmentedControl *control = [[VMCustomSegmentedControl alloc] initWithFrame:CGRectMake(20, 150, 200, VMCustomSegmentedControlHeight) items:items didMoveToItem:^(VMCustomSegmentedControl *control, NSInteger index) {
+//        NSLog(@"%ld",index);
+//    }];
+    
+    VMCustomSegmentedControl *control = [VMCustomSegmentedControl segmentedControlForItems:items widthForEachItem:50];
     _control = control;
     control.delegate = self;
     CGRect frame = control.frame;

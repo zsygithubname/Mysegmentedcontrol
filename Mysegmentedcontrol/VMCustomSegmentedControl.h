@@ -13,15 +13,14 @@
 - (void)segementedControl:(VMCustomSegmentedControl *)control didMoveToItem:(NSInteger)index;
 @end
 
-
+typedef void(^DidMoveToItem)(VMCustomSegmentedControl *control, NSInteger index);
 static CGFloat VMCustomSegmentedControlHeight = 32;
+
 @interface VMCustomSegmentedControl : UIView
 
-@property (nonatomic, strong) UIColor *moveViewColor;
-@property (nonatomic, strong) UIColor *selectColor;
-@property (nonatomic, strong) UIColor *normalColor;
-
-@property (nonatomic, assign) BOOL delegateDidResponds;
+@property (nonatomic, strong) UIColor *moveViewColor;//!<默认 whiteColor
+@property (nonatomic, strong) UIColor *selectColor;//!<默认 redColor
+@property (nonatomic, strong) UIColor *normalColor;//!<默认 whiteColor
 @property (nonatomic, weak) id<VMCustomSegmentedControlDelegate> delegate;
 /**
  便利构造器
@@ -32,6 +31,24 @@ static CGFloat VMCustomSegmentedControlHeight = 32;
  */
 + (VMCustomSegmentedControl *)segmentedControlForItems:(NSArray<NSString *> *)items widthForEachItem:(CGFloat)width;
 
+/**
+ init  每个item宽=frame.size.width / items.count
+
+ @param frame <#frame description#>
+ @param items <#items description#>
+ @return <#return value description#>
+ */
+- (instancetype)initWithFrame:(CGRect)frame items:(NSArray<NSString *> *)items;
+
+/**
+ block回调方式
+
+ @param frame <#frame description#>
+ @param items <#items description#>
+ @param didMoveToItem <#didMoveToItem description#>
+ @return <#return value description#>
+ */
+- (instancetype)initWithFrame:(CGRect)frame items:(NSArray<NSString *> *)items didMoveToItem:(DidMoveToItem)didMoveToItem;
 /**
  插入一个item 执行完毕会调用代理方法 - segementedControl: didMoveToItem: 一次
 

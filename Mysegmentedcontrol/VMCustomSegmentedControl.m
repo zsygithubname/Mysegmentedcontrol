@@ -19,31 +19,39 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
 @property (nonatomic, strong) UIView *moveView;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *normalBtns;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *selectBtns;
+@property (nonatomic, assign) BOOL delegateDidResponds;
 
 @property (nonatomic, assign) MoveDirection direction;
 @property (nonatomic, assign) NSInteger currentSelectIndex;
+@property (nonatomic, copy) DidMoveToItem didMoveToItem;
 @end
 @implementation VMCustomSegmentedControl
 
 #pragma mark - init
-- (instancetype)init {
-    if (self = [super init]) {
-        _moveViewColor = [UIColor whiteColor];
-        _normalColor = [UIColor whiteColor];
-        _selectColor = [UIColor redColor];
-    }
-    return self;
-}
 + (VMCustomSegmentedControl *)segmentedControlForItems:(NSArray<NSString *> *)items widthForEachItem:(CGFloat)width {
     if (!items.count || width <= 0) {
         return nil;
     }
-    VMCustomSegmentedControl *control = [[VMCustomSegmentedControl alloc] init];
-    control.frame = CGRectMake(0, 0, items.count * width, VMCustomSegmentedControlHeight);
-    control.items = [NSMutableArray arrayWithArray:items];
-    control.eachItemWidth = width;
-    [control creatControlSubviews];
+    CGRect frame = CGRectMake(0, 0, items.count * width, VMCustomSegmentedControlHeight);
+    VMCustomSegmentedControl *control = [[self alloc] initWithFrame:frame items:items];
     return control;
+}
+- (instancetype)initWithFrame:(CGRect)frame items:(NSArray<NSString *> *)items {
+    if (self = [super initWithFrame:frame]) {
+        [self.items addObjectsFromArray:items];
+        _eachItemWidth = frame.size.width / items.count;
+        _moveViewColor = [UIColor whiteColor];
+        _normalColor = [UIColor whiteColor];
+        _selectColor = [UIColor redColor];
+        [self creatControlSubviews];
+    }
+    return self;
+}
+- (instancetype)initWithFrame:(CGRect)frame items:(NSArray<NSString *> *)items didMoveToItem:(DidMoveToItem)didMoveToItem {
+    if ([self initWithFrame:frame items:items]) {
+        self.didMoveToItem = didMoveToItem;
+    }
+    return self;
 }
 - (void)creatControlSubviews {
     for (int i = 0; i < self.items.count; i++) {
@@ -72,6 +80,14 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
     [_moveView addGestureRecognizer:pan];
 }
+
+/**
+ 工厂
+
+ @param title <#title description#>
+ @param titleColor <#titleColor description#>
+ @return <#return value description#>
+ */
 - (UIButton *)buttonForControlByTitle:(NSString *)title titleColor:(UIColor *)titleColor {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:title forState:UIControlStateNormal];
@@ -100,7 +116,7 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
     CGPoint topViewCenter = self.topView.center;
     if (pan.state == UIGestureRecognizerStateEnded) {
         for (UIButton *btn in self.normalBtns) {
-            //找到差值小于等于item宽 1/2的 就是松手后要停留的按钮 (有个小问题,如果正好移动到两个item的中间 就会有两个差值最小的btn 但是总是去停留在第一个遍历到的,可以根据移动方向再优化下,向右移动就正向遍历,向左移动就倒序遍历)
+            //找到差值小于等于item宽 1/2的(即距离滑动的view.center最近的按钮) 就是松手后要停留的按钮 (有个小问题,如果正好移动到两个item的中间 就会有两个差值最小的btn 但是总是去停留在第一个遍历到的,可以根据移动方向再优化下,向右移动就正向遍历,向左移动就倒序遍历)
             CGFloat difference = fabs(moveViewCenter.x - btn.center.x);
             if (difference <= self.eachItemWidth / 2.0) {
                 topViewCenter.x -= (btn.center.x - moveViewCenter.x);
@@ -116,8 +132,9 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
         }
     }else {
         CGPoint currentPoint = [pan translationInView:pan.view];
+        //判断滑动方向
         if (currentPoint.x > 0) {
-            _direction = MoveDirectionRight;//没用
+            _direction = MoveDirectionRight;
         }else {
             _direction = MoveDirectionLeft;
         }
@@ -141,6 +158,11 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
             self.delegateDidResponds = YES;
             [self.delegate segementedControl:self didMoveToItem:index];
         }
+    }
+    
+    //block回调
+    if (self.didMoveToItem) {
+        self.didMoveToItem(self, index);
     }
 }
 
@@ -256,6 +278,12 @@ typedef NS_ENUM(NSInteger, MoveDirection) {
     }];
 }
 #pragma - mark getter
+- (NSMutableArray<NSString *> *)items {
+    if (!_items) {
+        _items = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _items;
+}
 - (NSMutableArray<UIButton *> *)normalBtns {
     if (!_normalBtns) {
         _normalBtns = [NSMutableArray arrayWithCapacity:self.items.count];
